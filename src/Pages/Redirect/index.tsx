@@ -10,11 +10,11 @@ const index = () => {
         <Button type='primary' icon={<CalendarOutlined />} onClick={()=> navigate("/patient/login")}>
             Hasta Randevu Sistemi'ne Giriş
         </Button>
-        <Button type='primary' icon={<ContactsOutlined />}>
-            Hasta Randevu Sistemi'ne Giriş
+        <Button type='primary' icon={<ContactsOutlined />} onClick={()=> navigate("/doctor/login")}>
+            Doktor Bilgi Sistemi'ne Giriş
         </Button>
-        <Button type='primary' icon={<ToolOutlined />}>
-            Hasta Randevu Sistemi'ne Giriş
+        <Button type='primary' icon={<ToolOutlined />} onClick={()=> navigate("/admin/login")}>
+            Yönetici Sistemi'ne Giriş
         </Button>
     </div>
   )
