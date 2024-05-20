@@ -1,31 +1,86 @@
 import React, { useState } from 'react'
+import ApiManager from '../../ApiManager'
 import { UserOutlined } from '@ant-design/icons';
 import type { FormProps } from 'antd';
 import { Button, Input, Space, Form, message  } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone,LockOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 interface props {
   redirect: number;
 }
 
 type FieldType = {
-  tcno?: string;
+  username?: string;
   password?: string;
 }
 
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-  console.log(values);
-  
-}
 
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (info) => {
-  console.log(info);
-  
-}
 
 const Login = (props: props) => { // 0 == patient , 1 == doctor , 2 == admin
   const [passwordVisible, setPasswordVisible] = React.useState(false);
+  const navigate = useNavigate();
 
+  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    console.log(values);
+    
+    switch(props.redirect){
+      case 0:
+        ApiManager.post('Login/Patient',values,{})
+        .then(res => {
+          //console.log(res);
+          if(res.data.statusCode == 200){
+          localStorage.setItem('token',res.data.token);
+          localStorage.setItem('userInfo',JSON.stringify(res.data.data));
+          //console.log(res.data.data);
+          navigate('/patient/dashboard')
+        }else {
+          message.error('Kullanıcı adı veya şifreniz yanlıştır.');
+        }
+          
+        })
+        
+        break;
+      case 1:
+        ApiManager.post('Login/Doctor',values,{})
+        .then(res => {
+          //console.log(res);
+          if(res.data.statusCode == 200){
+          localStorage.setItem('token',res.data.token);
+          localStorage.setItem('userInfo',JSON.stringify(res.data.data));
+          //console.log(res.data.data);
+          navigate('/doctor/dashboard')
+        }else {
+          message.error('Kullanıcı adı veya şifreniz yanlıştır.');
+        }
+          
+        })
+        break;
+        case 2:
+          ApiManager.post('Login/Admin',values,{})
+        .then(res => {
+          console.log(res);
+          if(res.data.statusCode == 200){
+          localStorage.setItem('token',res.data.token);
+          localStorage.setItem('userInfo',JSON.stringify(res.data.data));
+          //console.log(res.data.data);
+          navigate('/admin/dashboard')
+        }else {
+          message.error('Kullanıcı adı veya şifreniz yanlıştır.');
+        }
+          
+        })
+        break;
+          
+    }
+    
+  
+  }
+  
+  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (info) => {
+    console.log(info);
+    
+  }
 
   return (
     <div className=' w-screen h-screen  h-screen flex align-middle justify-center'>
@@ -36,9 +91,9 @@ const Login = (props: props) => { // 0 == patient , 1 == doctor , 2 == admin
          onFinishFailed={onFinishFailed}
          >
           <Form.Item<FieldType>
-            name="tcno"
-            rules={[{required:true, message:'T.C kimlik numaranızı giriniz.' }]}>
-        <Input size="large" placeholder="T.C. Kimlik numarası" prefix={<UserOutlined />} />
+            name="username"
+            rules={[{required:true, message:'Kullanıcı Adınızı Giriniz' }]}>
+        <Input size="large" placeholder="Kullanıcı Adı" prefix={<UserOutlined />} />
         </Form.Item>
         <Form.Item<FieldType>
           name='password'

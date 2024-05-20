@@ -4,40 +4,29 @@ import illustration from '../../assets/patient/Online Doctor-amico.svg'
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import PersonalInfo from "./PersonalInfo";
-import type { PersonInfo } from "./PersonalInfo";
-
+import Appointments from "./Appointments";
+import Records from "./Records";
 
 const DashboardView = () => {
 
     const navigate = useNavigate();
-
-    const example1:PersonInfo = {
-      name: 'alper',
-      surname: 'Komurcu',
-      password: '12345',
-      birth: '24 Subat 2004',
-      gender: 'Erkek',
-      phone: '5427142402',
-      email: 'ALperkomurcu@outlook.com',
-      adress: 'Osmaniye Mah. Sehitmehmetcik Sokak Kucuk Apt',
-      
-    }
+    const user = JSON.parse(localStorage.getItem('userInfo'));
 
     const items: TabsProps['items'] = [
       {
         key: '1',
         label: 'Kişisel bilgilerim',
-        children: <PersonalInfo person={example1}/>, //'Kişiler bilgilerimin gösterileceği component gösterilecek'
+        children: <PersonalInfo />, //'Kişiler bilgilerimin gösterileceği component gösterilecek'
       },
       {
         key: '2',
         label: 'Randevularım',
-        children: 'gecmis, gelecek randevularin gosterilecegi, bunlarin iptal veya duzenlenebilecegi bir component olacak. ayni sekilde randevuyu goruntule dendiginde ekrana modal cikip randevu bilgilerini gosterecek.',
+        children: <Appointments />,
       },
       {
         key: '3',
         label: 'Laboratuvar sonuç ve raporları',
-        children: 'laboratuvar sonuçları yer alacak liste seklinde. kaldır butonu, indir butonu ve düzenle butonu yer alacak. yeni bir rapor indirebilecek.',
+        children: <Records />, //laboratuvar sonuçları yer alacak liste seklinde. kaldır butonu, indir butonu ve düzenle butonu yer alacak. yeni bir rapor indirebilecek.
       },
     ];
     
@@ -46,7 +35,7 @@ const DashboardView = () => {
     <div className="w-full pl-5 pt-8 grid-cols-2 grid gap-4 ">
         
         <div className="col-span-1">
-        Hoşgeldiniz, Lorem, ipsum.
+        Hoşgeldiniz, {user.firstName + ' ' + user.lastName}.
         <Divider />
         <Tabs defaultActiveKey="1" items={items} />
         </div>

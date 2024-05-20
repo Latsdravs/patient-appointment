@@ -4,7 +4,7 @@ import DashboardView from '../../VIews/Patient/DashboardView'
 const index = () => {
   return (
     <>
-    <Navbar navbar_text='Hasta Randevu Sistemi'/>
+    <Navbar type={0}/>
     <DashboardView />
     </>
   )

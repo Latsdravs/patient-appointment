@@ -6,7 +6,8 @@ import {NotificationOutlined} from '@ant-design/icons'
 import { Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
 interface props {
-    navbar_text: string;
+    type: number;
+
 }
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -20,6 +21,12 @@ const Delete = () => {
 const index = (props: props) => {
 
     const navigate = useNavigate();
+
+    const logOut = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userInfo');
+        navigate('/');
+    }
     
     const notifications = [
         {
@@ -43,20 +50,7 @@ const index = (props: props) => {
     ]
 
     const items: MenuItem[] = [
-        {
-            label: (
-               <span onClick={(e) => navigate('#')}>Randevu Al</span> 
-            ),
-            key: 'randevu',
-            
-        },
-        {
-            label: (
-               <span onClick={(e) => navigate('#')}>Profilim</span> 
-            ),
-            key: 'profil',
-            
-        },
+        
         {
             label: (
                <span onClick={(e) => navigate('#')}>Bildirimlerim</span> 
@@ -66,18 +60,64 @@ const index = (props: props) => {
         },
         {
             label: (
-               <span onClick={(e) => navigate('#')}>Çıkış Yap</span> 
+               <span onClick={(e) => logOut()}>Çıkış Yap</span> 
             ),
             key: 'logout',
             
         },
-    ]
+    ];
+
+    var text  = '';
+
+    switch(props.type){
+        case 0:
+            text = 'Hasta Randevu Sistemi';
+
+            items.unshift({
+                label: (
+                   <span onClick={(e) => navigate('/patient/appointment')}>Randevu Al</span> 
+                ),
+                key: 'randevu',
+                
+            });
+            items.unshift( {
+                label: (
+                   <span onClick={(e) => navigate('/patient/dashboard')}>Profilim</span> 
+                ),
+                key: 'profil',
+                
+            })
+            break;
+
+        case 1:
+            text = 'Doktor Yönetim Sistemi';
+            items.unshift( {
+                label: (
+                   <span onClick={(e) => navigate('/doctor/dashboard')}>Profilim</span> 
+                ),
+                key: 'profil',
+                
+            });
+            break;
+
+        case 2:
+            text = "Admin Yönetim Sistemi"; 
+            items.unshift( {
+                label: (
+                   <span onClick={(e) => navigate('/admin/dashboard')}>Yönetim Sistemi</span> 
+                ),
+                key: 'profil',
+                
+            })
+            break;
+        }
+            
 
   return (
     <div className='w-screen h-14 flex flex-row  px-6 align-center bg-indigo-300 shadow-sm'>
         <div className='flex items-center'>
            <span >
-            {props.navbar_text}
+            {text}
             </span>
         </div>
         <Menu style={{width:'400px'}} className=' justify-self-end ml-auto bg-indigo-300' selectedKey={['profil']} mode="horizontal" items={items} />
